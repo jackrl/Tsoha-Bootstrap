@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Items</h1>
+
+<p>
+  <a href="#" class="btn btn-success">Add an item</a>
+</p>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Part Number</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><a href="#">RES-000000</a></td>
+      <td><a href="#">Resistor</a></td>
+      <td>10k, 5%, 100ppm, 100mW, 50V, 0805</td>
+      <td><a class="btn btn-default btn-sm" href="#">Edit</a></td>
+    </tr>
+    <tr>
+      <td><a href="#">PCBA-000000</a></td>
+      <td><a href="#">Printed Circuit Board Assembly</a></td>
+      <td>Resistor Board</td>
+      <td><a class="btn btn-default btn-sm" href="#">Edit</a></td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

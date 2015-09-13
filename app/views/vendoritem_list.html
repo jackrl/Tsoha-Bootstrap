@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Vendor Items</h1>
+
+<p>
+  <a href="#" class="btn btn-success">Add a vendor item</a>
+</p>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Vendor</th>
+      <th>Part Number</th>
+      <th>Datasheet</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><a href="#">Panasonic</a></td>
+      <td><a href="#">ERA-S15J103V</a></td>
+      <td><a class="btn btn-default btn-sm" href="#">View datasheet</a></td>
+      <td><a class="btn btn-default btn-sm" href="#">Edit</a></td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
