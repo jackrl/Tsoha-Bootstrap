@@ -5,7 +5,23 @@ $routes->get('/', function() {
 });
 
 $routes->get('/item', function() {
-	HelloWorldController::item_list();
+	ItemController::index();
+});
+
+$routes->post('/item', function(){
+	ItemController::store();
+});
+
+$routes->get('/item/new', function() {
+	ItemController::create();
+});
+
+$routes->get('/item/:id', function($id) {
+	ItemController::show($id);
+});
+
+$routes->get('/itemtype/:id', function($id) {
+	ItemTypeController::show($id);
 });
 
 $routes->get('/itemtype', function() {
@@ -16,11 +32,7 @@ $routes->get('/vendoritem', function() {
 	HelloWorldController::vendorItem_list();
 });
 
-$routes->get('/vendor', function() {
-	HelloWorldController::vendor_list();
-});
-
-$routes->get('/vendorxyz', function() {
+$routes->get('/vendors', function() {
 	HelloWorldController::vendor_list();
 });
 

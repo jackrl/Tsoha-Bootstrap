@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Create new item</h1>
+
+<form method="post" action="{{base_path}}/item">
+  <div class="form-group">
+    <label>Item Type</label>
+    <select name="itemtype_id" class="form-control" type="text">
+    {% for itemtype in itemtypes %}
+      <option value="{{itemtype.id}}">{{itemtype.name}}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Description</label>
+    <input name="description" class="form-control" type="text">
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">Create</button>
+  </div>
+</form>
+{% endblock %}

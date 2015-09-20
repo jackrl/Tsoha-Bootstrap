@@ -3,7 +3,7 @@
 class HelloWorldController extends BaseController{
 
   public static function index(){
-   	  View::make('home.html');
+    View::make('home.html');
   }
 
   public static function item_list(){
@@ -59,7 +59,14 @@ class HelloWorldController extends BaseController{
   }
 
   public static function sandbox(){
-      // Testaa koodiasi täällä
-    View::make('helloworld.html');
+    // Testaa koodiasi täällä
+    //View::make('helloworld.html');
+    $resistor = Item::find(1);
+    $bom = Item::find(2);
+    $items = Item::all();
+    // Kint-luokan dump-metodi tulostaa muuttujan arvon
+    Kint::dump($items);
+    Kint::dump($resistor);
+    Kint::dump($bom);
   }
 }
