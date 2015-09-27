@@ -22,6 +22,7 @@ class User extends BaseModel{
 		$user = null;
 		if($row){
 			$user = new User(array(
+				'id' => $row['id'],
 				'username' => $row['username'],
 				'password' => $row['password'],
 				'admin' => $row['admin']
@@ -42,9 +43,10 @@ class User extends BaseModel{
 		$user = null;
 		if($row){
 			$user = new User(array(
-				'username' => $row->username,
-				'password' => $row->password,
-				'admin' => $row->admin
+				'id' => $row['id'],
+				'username' => $row['username'],
+				'password' => $row['password'],
+				'admin' => $row['admin']
 				));
 		}
 		

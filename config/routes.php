@@ -99,4 +99,10 @@ $routes->get('/sandbox', function() {
 
 	$session_id = $_SESSION['user'];
 	Kint::dump($session_id);
+
+	$find_admin = User::find(1);
+	Kint::dump($find_admin);
+
+	$find_normalUser = User::find(2);
+	Kint::dump($find_normalUser);
 });

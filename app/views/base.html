@@ -43,7 +43,7 @@
 
         <ul class="nav navbar-nav navbar-right">
           {% if user_logged_in %}
-          <li>Logged in as {{user_logged_in.username}}</li>
+          <li><a href="#">Logged in as {{user_logged_in.username}}</a></li>
           {% else %}
           <li><a href="{{base_path}}/login">Sign in</a></li>
           {% endif %}

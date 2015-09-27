@@ -5,7 +5,9 @@
 <h1>Item: <small>{{item.partnumber}}</small></h1>
 
 <p>
-{{forms.destroy_button("#{base_path}/item/#{item.id}/destroy")}}
+  {% if user_logged_in.admin %}
+  {{forms.destroy_button("#{base_path}/item/#{item.id}/destroy")}}
+  {% endif %}
   <a href="{{base_path}}/item/{{item.id}}/edit" class="btn btn-default">Edit</a>
 </p>
 

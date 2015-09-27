@@ -17,7 +17,7 @@ class Item extends BaseModel{
 	public function save(){
 		$query = DB::connection()->prepare('INSERT INTO Item (itemtype_id, partnumber, description)
 												VALUES (:itemtype_id, :partnumber, :description)
-												RETURNING id, hasbom');
+												RETURNING id');
 		$query->execute(array(
 			'itemtype_id' => $this->itemtype_id,
 			'partnumber' => $this->partnumber,
