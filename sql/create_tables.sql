@@ -1,3 +1,10 @@
+CREATE TABLE Users(
+	id SERIAL PRIMARY KEY,
+	username varchar(20) NOT NULL,
+	password varchar(20) NOT NULL,
+	admin boolean DEFAULT FALSE
+);
+
 CREATE TABLE ItemType(
 	id SERIAL PRIMARY KEY,
 	name varchar(50) NOT NULL,
@@ -9,15 +16,7 @@ CREATE TABLE Item(
 	id SERIAL PRIMARY KEY,
 	partNumber varchar(15) NOT NULL,
 	description varchar(100) NOT NULL,
-	hasBOM boolean DEFAULT FALSE,
 	itemtype_id INTEGER REFERENCES ItemType(id)
-);
-
-CREATE TABLE PartsList(
-	id SERIAL PRIMARY KEY,
-	parent_id INTEGER REFERENCES Item(id),
-	child_id INTEGER REFERENCES Item(id),
-	refDes varchar(5)
 );
 
 CREATE TABLE Vendor(

@@ -1,9 +1,12 @@
+{% import "macros/forms.html" as forms %}
+
 {% extends "base.html" %}
 {% block content %}
 <h1>Item: <small>{{item.partnumber}}</small></h1>
 
 <p>
-  <button class="btn btn-danger">Delete</button> <a href="{{base_path}}/item/{{item.id}}/edit" class="btn btn-default">Edit</a>
+{{forms.destroy_button("#{base_path}/item/#{item.id}/destroy")}}
+  <a href="{{base_path}}/item/{{item.id}}/edit" class="btn btn-default">Edit</a>
 </p>
 
 <ul>
@@ -14,7 +17,7 @@
 <h3>Vendor Items</h3>
 
 <p>
-<a href="#" class="btn btn-success">Add vendor item</a>
+  <a href="#" class="btn btn-success">Add vendor item</a>
 </p>
 
 <table class="table table-striped table-bordered">
@@ -23,37 +26,6 @@
       <th>Vendor</th>
       <th>Part Number</th>
       <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-  </tbody>
-</table>
-
-<h3>Where Used</h3>
-<table class="table table-striped table-bordered">
-  <thead>
-    <tr>
-      <th>Part Number</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Quantity</th>
-    </tr>
-  </thead>
-
-  <tbody>
-  </tbody>
-</table>
-
-<h3>Where Used</h3>
-<table class="table table-striped table-bordered">
-  <thead>
-    <tr>
-      <th>Part Number</th>
-      <th>Quantity</th>
-      <th>RefDes</th>
-      <th>Type</th>
-      <th>Description</th>
     </tr>
   </thead>
 

@@ -22,20 +22,67 @@ class ItemController extends BaseController{
 
 	public static function store(){
 		$params = $_POST;
-
-		$itemtype = ItemType::find($params['itemtype_id']);
-
-		$PN =$itemtype->getNextPN();
-
-		$item = new Item(array(
+		$attributes = array(
 			'itemtype_id' => $params['itemtype_id'],
-			'partnumber' => $PN,
 			'description' => $params['description']
-			));
+			);
 
-		$item->save();
+		$item = new Item($attributes);
 
-		Redirect::to('/item/' . $item->id, array('message' => 'Item ' . $PN . ' has been added to the database'));
+		$errors = $item->errors();
+
+		if(count($errors) == 0){
+			// The part number is added when the existance of the part type is validated
+			$itemtype = ItemType::find($params['itemtype_id']);
+			$item->setPN($itemtype->getNextPN());
+
+			$item->save();
+
+			Redirect::to('/item/' . $item->id, array('message' => 'The new item has been added to the database'));
+		}else{
+			$itemtypes = ItemType::all();
+
+			View::make('item/new.html', array('errors' => $errors, 'attributes' => $attributes, 'itemtypes' => $itemtypes));
+		}
 	}
 
+	public static function edit($id){
+		$item = Item::find($id);
+		$itemtype = ItemType::find($item->itemtype_id);
+		View::make('item/edit.html', array('item' => $item, 'itemtype' => $itemtype));
+	}
+
+	public static function update($id){
+		$params = $_POST;
+
+		$attributes = array(
+			'id' => $id,
+			'itemtype_id' => Item::find($id)->itemtype_id,
+			'description' => $params['description']
+			);
+
+		$item = new Item($attributes);
+		$errors = $item->errors();
+
+		if(count($errors) > 0){
+			$item = Item::find($id);
+			$itemtype = ItemType::find($item->itemtype_id);
+
+			View::make('item/edit.html', array('errors' => $errors,
+											   'given_description' => $params['description'],
+											   'item' => $item,
+											   'itemtype' => $itemtype));
+		}else{
+			$item->update();
+
+			Redirect::to('/item/' . $item->id, array('message' => 'The item has been modified successfully!'));
+		}
+	}
+
+	public static function destroy($id){
+		$item = new Item(array('id' => $id));
+		$item->destroy();
+
+		Redirect::to('/item', array('message' => 'The item has been removed successfully!'));
+	}
 }

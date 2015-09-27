@@ -59,14 +59,15 @@ class HelloWorldController extends BaseController{
   }
 
   public static function sandbox(){
-    // Testaa koodiasi täällä
-    //View::make('helloworld.html');
-    $resistor = Item::find(1);
-    $bom = Item::find(2);
-    $items = Item::all();
-    // Kint-luokan dump-metodi tulostaa muuttujan arvon
-    Kint::dump($items);
-    Kint::dump($resistor);
-    Kint::dump($bom);
+    $doom = new Item(array(
+      'id' => '21321',
+      'itemtype_id' => '454',
+      'partnumber' => 'RES-0211231',
+      'description' => '0123457890',
+      'hasbom' => 'false'
+      ));
+    $errors = $doom->errors();
+
+    Kint::dump($errors);
   }
 }

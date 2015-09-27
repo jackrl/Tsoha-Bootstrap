@@ -1,7 +1,15 @@
 <?php
 
 $routes->get('/', function() {
-	HelloWorldController::index();
+	ItemController::index();
+});
+
+$routes->get('/login', function(){
+	UserController::login();
+});
+
+$routes->post('/login', function(){
+	UserController::handle_login();
 });
 
 $routes->get('/item', function() {
@@ -18,6 +26,18 @@ $routes->get('/item/new', function() {
 
 $routes->get('/item/:id', function($id) {
 	ItemController::show($id);
+});
+
+$routes->get('/item/:id/edit', function($id){
+	ItemController::edit($id);
+});
+
+$routes->post('/item/:id/edit', function($id){
+	ItemController::update($id);
+});
+
+$routes->post('/item/:id/destroy', function($id){
+	ItemController::destroy($id);
 });
 
 $routes->get('/itemtype/:id', function($id) {
@@ -73,5 +93,9 @@ $routes->get('/vendor/1/edit', function() {
 });
 
 $routes->get('/sandbox', function() {
-	HelloWorldController::sandbox();
+	$user = BaseController::get_user_logged_in();
+
+	Kint::dump($user);
+
+	Kint::dump($_SESSION['user']);
 });

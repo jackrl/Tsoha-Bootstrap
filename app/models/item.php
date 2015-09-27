@@ -2,32 +2,55 @@
 
 class Item extends BaseModel{
 
-	public $id, $itemtype_id, $partnumber, $description, $hasbom, $itemtype_name;
+	public $id, $itemtype_id, $partnumber, $description;
 
 	public function __construct($attributes){
 		parent::__construct($attributes);
+
+		$this->validators = array('validate_itemtype_id', 'validate_description');
+	}
+
+	public function setPN($PN) {
+		$this->partnumber = $PN;
 	}
 
 	public function save(){
-    $query = DB::connection()->prepare('INSERT INTO Item (itemtype_id, partnumber, description)
-    										VALUES (:itemtype_id, :partnumber, :description)
-    										RETURNING id, hasbom');
-    $query->execute(array(
-    	'itemtype_id' => $this->itemtype_id,
-    	'partnumber' => $this->partnumber,
-    	'description' => $this->description
-    ));
+		$query = DB::connection()->prepare('INSERT INTO Item (itemtype_id, partnumber, description)
+												VALUES (:itemtype_id, :partnumber, :description)
+												RETURNING id, hasbom');
+		$query->execute(array(
+			'itemtype_id' => $this->itemtype_id,
+			'partnumber' => $this->partnumber,
+			'description' => $this->description
+			));
 
-    $row = $query->fetch();
-    $this->id = $row['id'];
-    $this->hasbom = $row['hasbom'];
+		$row = $query->fetch();
+		$this->id = $row['id'];
+	}
+
+	public function update(){
+	    $query = DB::connection()->prepare('UPDATE Item SET (description)
+	    										= (:description)
+	    										WHERE id = :id');
+	    $query->execute(array(
+	    	'id' => $this->id,
+	    	'description' => $this->description
+	    ));
+	}
+
+	public function destroy(){
+	    $query = DB::connection()->prepare('DELETE FROM Item
+	    										WHERE id = :id');
+	    $query->execute(array(
+	    	'id' => $this->id
+	    ));
 	}
 
 	public static function find($id){
 		$query = DB::connection()->prepare('SELECT Item.*, ItemType.name AS itemtype_name
 												FROM Item, ItemType
 												WHERE Item.id = :id
-													AND Item.itemtype_id = ItemType.id
+												AND Item.itemtype_id = ItemType.id
 												LIMIT 1');
 		$query->execute(array('id' => $id));
 		$row = $query->fetch();
@@ -37,9 +60,7 @@ class Item extends BaseModel{
 				'id' => $row['id'],
 				'itemtype_id' => $row['itemtype_id'],
 				'partnumber' => $row['partnumber'],
-				'description' => $row['description'],
-				'hasbom' => $row['hasbom'],
-				'itemtype_name' => $row['itemtype_name']
+				'description' => $row['description']
 				));
 
 			return $item;
@@ -49,9 +70,8 @@ class Item extends BaseModel{
 	}
 
 	public static function all(){
-		$query = DB::connection()->prepare('SELECT Item.*, ItemType.name AS itemtype_name
-												FROM Item, ItemType
-												WHERE Item.itemtype_id = ItemType.id
+		$query = DB::connection()->prepare('SELECT *
+												FROM Item
 												ORDER BY Item.partnumber');
 		$query->execute();
 		$rows = $query->fetchAll();
@@ -62,9 +82,7 @@ class Item extends BaseModel{
 				'id' => $row['id'],
 				'itemtype_id' => $row['itemtype_id'],
 				'partnumber' => $row['partnumber'],
-				'description' => $row['description'],
-				'hasbom' => $row['hasbom'],
-				'itemtype_name' => $row['itemtype_name']
+				'description' => $row['description']
 				));
 		}
 
@@ -75,12 +93,41 @@ class Item extends BaseModel{
 		$query = DB::connection()->prepare('SELECT ItemType.name AS itemtype_name
 												FROM Item, ItemType
 												WHERE Item.id = :id
-													AND Item.itemtype_id = ItemType.id
+												AND Item.itemtype_id = ItemType.id
 												LIMIT 1');
 
 		$query->execute(array('id' => $this->id));
 		$row = $query->fetch();
 
 		return $row['itemtype_name'];
+	}
+
+	public function validate_itemtype_id() {
+		$errors = array();
+
+		$query = DB::connection()->prepare('SELECT COUNT(*)
+												FROM ItemType
+												WHERE id = :id');
+		$query->execute(array('id' => $this->itemtype_id));
+		$row = $query->fetch();
+
+		if($row['count'] != 1) {
+			$errors[] = 'Item type does not exist!';
+		}
+
+		return $errors;
+	}
+
+	public function validate_description() {
+		$errors = array();
+
+		if($this->description == '' || $this->description == null){
+			$errors[] = 'The description cannot be left empty!';
+		}
+		if(strlen($this->description) < 10){
+			$errors[] = 'The description must be over 10 characters long!';
+		}
+
+		return $errors;
 	}
 }
