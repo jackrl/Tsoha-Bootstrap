@@ -97,5 +97,6 @@ $routes->get('/sandbox', function() {
 
 	Kint::dump($user);
 
-	Kint::dump($_SESSION['user']);
+	$session_id = $_SESSION['user'];
+	Kint::dump($session_id);
 });
