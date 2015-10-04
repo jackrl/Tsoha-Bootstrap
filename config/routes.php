@@ -4,6 +4,7 @@ $routes->get('/', function() {
 	ItemController::index();
 });
 
+// Login and logout
 $routes->get('/login', function(){
 	UserController::login();
 });
@@ -12,6 +13,11 @@ $routes->post('/login', function(){
 	UserController::handle_login();
 });
 
+$routes->post('/logout', function(){
+  UserController::logout();
+});
+
+// Item
 $routes->get('/item', function() {
 	ItemController::index();
 });
@@ -40,56 +46,33 @@ $routes->post('/item/:id/destroy', function($id){
 	ItemController::destroy($id);
 });
 
+// ItemType
+$routes->get('/itemtype', function() {
+	ItemTypeController::index();
+});
+
+$routes->post('/itemtype', function(){
+	ItemTypeController::store();
+});
+
+$routes->get('/itemtype/new', function() {
+	ItemTypeController::create();
+});
+
 $routes->get('/itemtype/:id', function($id) {
 	ItemTypeController::show($id);
 });
 
-$routes->get('/itemtype', function() {
-	HelloWorldController::itemtype_list();
+$routes->get('/itemtype/:id/edit', function($id){
+	ItemTypeController::edit($id);
 });
 
-$routes->get('/vendoritem', function() {
-	HelloWorldController::vendorItem_list();
+$routes->post('/itemtype/:id/edit', function($id){
+	ItemTypeController::update($id);
 });
 
-$routes->get('/vendors', function() {
-	HelloWorldController::vendor_list();
-});
-
-$routes->get('/item/1', function() {
-	HelloWorldController::item_show();
-});
-
-$routes->get('/item/2', function() {
-	HelloWorldController::bom_show();
-});
-
-$routes->get('/itemtype/1', function() {
-	HelloWorldController::itemtype_show();
-});
-
-$routes->get('/vendoritem/1', function() {
-	HelloWorldController::vendorItem_show();
-});
-
-$routes->get('/vendor/1', function() {
-	HelloWorldController::vendor_show();
-});
-
-$routes->get('/item/1/edit', function() {
-	HelloWorldController::item_edit();
-});
-
-$routes->get('/itemtype/1/edit', function() {
-	HelloWorldController::itemtype_edit();
-});
-
-$routes->get('/vendoritem/1/edit', function() {
-	HelloWorldController::vendorItem_edit();
-});
-
-$routes->get('/vendor/1/edit', function() {
-	HelloWorldController::vendor_edit();
+$routes->post('/itemtype/:id/destroy', function($id){
+	ItemTypeController::destroy($id);
 });
 
 $routes->get('/sandbox', function() {

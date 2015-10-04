@@ -3,7 +3,8 @@
 class ItemController extends BaseController{
 
 	public static function index(){
-		$items = Item::all();
+		$options = array();
+		$items = Item::all($options);
 
 		View::make('item/index.html', array('items' => $items));
 	}
@@ -15,12 +16,16 @@ class ItemController extends BaseController{
 	}
 
 	public static function create(){
+		self::check_logged_in();
+
 		$itemtypes = ItemType::all();
 
 		View::make('item/new.html', array('itemtypes' => $itemtypes));
 	}
 
 	public static function store(){
+		self::check_logged_in();
+
 		$params = $_POST;
 		$attributes = array(
 			'itemtype_id' => $params['itemtype_id'],
@@ -47,12 +52,16 @@ class ItemController extends BaseController{
 	}
 
 	public static function edit($id){
+		self::check_logged_in();
+
 		$item = Item::find($id);
 		$itemtype = ItemType::find($item->itemtype_id);
 		View::make('item/edit.html', array('item' => $item, 'itemtype' => $itemtype));
 	}
 
 	public static function update($id){
+		self::check_logged_in();
+
 		$params = $_POST;
 
 		$attributes = array(
@@ -80,6 +89,8 @@ class ItemController extends BaseController{
 	}
 
 	public static function destroy($id){
+		self::check_logged_in();
+		
 		$item = new Item(array('id' => $id));
 		$item->destroy();
 

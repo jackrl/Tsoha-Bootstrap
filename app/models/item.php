@@ -69,11 +69,18 @@ class Item extends BaseModel{
 		return null;
 	}
 
-	public static function all(){
-		$query = DB::connection()->prepare('SELECT *
-												FROM Item
-												ORDER BY Item.partnumber');
-		$query->execute();
+	public static function all($options){
+		$query_string = 'SELECT *
+							FROM Item';
+		if(isset($options['itemtype_id'])){
+	      $query_string .= ' WHERE itemtype_id = :itemtype_id';
+	    }
+	    $query_string .= ' ORDER BY Item.partnumber';
+		
+
+		$query = DB::connection()->prepare($query_string);
+		$query->execute($options);
+
 		$rows = $query->fetchAll();
 		$items = array();
 

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Item Types</h1>
+
+{% if user_logged_in %}
+<p>
+  <a href="{{base_path}}/itemtype/new" class="btn btn-success">Create an item type</a>
+</p>
+{% endif %}
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>PN Prefix</th>
+      <th>Next PN</th>
+      {% if user_logged_in %}
+      <th></th>
+      {% endif %}
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for itemtype in itemtypes %}
+    <tr>
+      <td><a href="{{base_path}}/itemtype/{{itemtype.id}}">{{itemtype.name}}</a></td>
+      <td>{{itemtype.pnprefix}}</td>
+      <td>{{itemtype.nextpn}}</td>
+      {% if user_logged_in %}
+      <td><a class="btn btn-default btn-sm" href="{{base_path}}/itemtype/{{itemtype.id}}/edit">Edit</a></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

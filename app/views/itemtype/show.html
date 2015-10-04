@@ -1,16 +1,21 @@
+{% import "macros/forms.html" as forms %}
+
 {% extends "base.html" %}
 {% block content %}
-<h1 style="color: red;">Static for now</h1>
-
-<h1>Item type: <small>Rand type name</small></h1>
+<h1>Item type: <small>{{itemtype.name}}</small></h1>
 
 <p>
-  <button class="btn btn-danger">Delete</button> <a href="#" class="btn btn-default">Edit</a>
+  {% if user_logged_in.admin %}
+  {{forms.destroy_button("#{base_path}/itemtype/#{itemtype.id}/destroy")}}
+  {% endif %}
+  {% if user_logged_in %}
+  <a href="{{base_path}}/itemtype/{{itemtype.id}}/edit" class="btn btn-default">Edit</a>
+  {% endif %}
 </p>
 
 <ul>
-  <li><strong>PN Prefix: </strong>ABC</li>
-  <li><strong>Next PN: </strong>000001</li>
+  <li><strong>PN Prefix: </strong>{{itemtype.pnprefix}}</li>
+  <li><strong>Next PN: </strong>{{itemtype.nextpn}}</li>
 </ul>
 
 <h3>Items</h3>
@@ -19,13 +24,23 @@
   <thead>
     <tr>
       <th>Part Number</th>
-      <th>Type</th>
       <th>Description</th>
+      {% if user_logged_in %}
       <th></th>
+      {% endif %}
     </tr>
   </thead>
 
   <tbody>
+    {% for item in items %}
+    <tr>
+      <td><a href="{{base_path}}/item/{{item.id}}">{{item.partnumber}}</a></td>
+      <td>{{item.description}}</td>
+      {% if user_logged_in %}
+      <td><a class="btn btn-default btn-sm" href="{{base_path}}/item/{{item.id}}/edit">Edit</a></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
   </tbody>
 </table>
 {% endblock %}

@@ -19,4 +19,9 @@ class UserController extends BaseController{
       Redirect::to('/', array('message' => 'Welcome back ' . $user->username . '!'));
     }
   }
+
+  public static function logout(){
+    $_SESSION['user'] = null;
+    Redirect::to('/login', array('message' => 'You have successfully been logged out!'));
+  }
 }
