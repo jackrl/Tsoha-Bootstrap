@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Vendors</h1>
+
+{% if user_logged_in %}
+<p>
+  <a href="{{base_path}}/vendors/new" class="btn btn-success">Create a vendor</a>
+</p>
+{% endif %}
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      {% if user_logged_in %}
+      <th></th>
+      {% endif %}
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for vendor in vendors %}
+    <tr>
+      <td><a href="{{base_path}}/vendors/{{vendor.id}}">{{vendor.name}}</a></td>
+      {% if user_logged_in %}
+      <td><a class="btn btn-default btn-sm" href="{{base_path}}/vendors/{{vendor.id}}/edit">Edit</a></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

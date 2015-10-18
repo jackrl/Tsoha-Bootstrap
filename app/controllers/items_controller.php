@@ -11,8 +11,9 @@ class ItemController extends BaseController{
 
 	public static function show($id){
 		$item = Item::find($id);
+		$vendoritems = $item->getVendorItems($id);
 
-		View::make('item/show.html', array('item' => $item));
+		View::make('item/show.html', array('item' => $item, 'vendoritems' => $vendoritems));
 	}
 
 	public static function create(){
@@ -95,5 +96,49 @@ class ItemController extends BaseController{
 		$item->destroy();
 
 		Redirect::to('/item', array('message' => 'The item has been removed successfully!'));
+	}
+
+	public static function addVendorItem($id){
+		self::check_logged_in();
+
+		$item = new Item(array('id' => $id));
+
+		$options = array();
+		$allvendoritems = VendorItem::all($options);
+		$curvendoritems = $item->getVendorItems();
+
+		function compare_vendoritems($obj_a, $obj_b) { return $obj_a->id - $obj_b->id; }
+		$vendoritems = array_udiff($allvendoritems, $curvendoritems, 'compare_vendoritems');
+
+		View::make('item/vendoritem/add.html', array('item_id' => $id, 'vendoritems' => $vendoritems));
+	}
+	
+	public static function storeVendorItem($id){
+		self::check_logged_in();
+
+		$params = $_POST;
+
+		$query = DB::connection()->prepare('INSERT INTO ItemToVendorItemMap (item_id, vendoritem_id)
+												VALUES (:item_id, :vendoritem_id)');
+		$query->execute(array(
+			'item_id' => $id,
+			'vendoritem_id' => $params['vendoritem_id']
+			));
+
+		Redirect::to('/item/' . $id, array('message' => 'The vendor item has been added succesfully to this item'));
+	}
+
+	public static function  removeVendorItem($id){
+		self::check_logged_in();
+		
+		$params = $_POST;
+
+		$query = DB::connection()->prepare('DELETE FROM ItemToVendorItemMap
+    										WHERE item_id = :item_id
+											AND vendoritem_id = :vendoritem_id');
+    	$query->execute(array('item_id' => $id,
+							  'vendoritem_id' => $params['vendoritem_id']));
+
+		Redirect::to('/item/' . $id, array('message' => 'The vendor item has been removed successfully from this item!'));
 	}
 }

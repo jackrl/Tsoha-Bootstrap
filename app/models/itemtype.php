@@ -47,7 +47,7 @@ class ItemType extends BaseModel{
 	public static function find($id){
 		$query = DB::connection()->prepare('SELECT *
 												FROM ItemType
-												WHERE ItemType.id = :id
+												WHERE id = :id
 												LIMIT 1');
 		$query->execute(array('id' => $id));
 		$row = $query->fetch();
@@ -68,8 +68,8 @@ class ItemType extends BaseModel{
 
 	public static function all(){
 		$query = DB::connection()->prepare('SELECT *
-			FROM ItemType
-			ORDER BY name');
+												FROM ItemType
+												ORDER BY name');
 		$query->execute();
 		$rows = $query->fetchAll();
 		$itemtypes = array();

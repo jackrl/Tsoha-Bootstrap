@@ -40,6 +40,12 @@
         <ul class="nav navbar-nav">
           <li><a href="{{base_path}}/item">Items</a></li>
           <li><a href="{{base_path}}/itemtype">Item Types</a></li>
+          <li><a href="{{base_path}}/vendoritem">Vendor Items</a></li>
+          <li><a href="{{base_path}}/vendors">Vendors</a></li>
+
+          {% if user_logged_in.admin %}
+          <li><a href="{{base_path}}/user">Users</a></li>
+          {% endif %}
         </ul>
 
         {% if user_logged_in %}

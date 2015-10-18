@@ -47,10 +47,9 @@ class Item extends BaseModel{
 	}
 
 	public static function find($id){
-		$query = DB::connection()->prepare('SELECT Item.*, ItemType.name AS itemtype_name
-												FROM Item, ItemType
+		$query = DB::connection()->prepare('SELECT Item.*
+												FROM Item
 												WHERE Item.id = :id
-												AND Item.itemtype_id = ItemType.id
 												LIMIT 1');
 		$query->execute(array('id' => $id));
 		$row = $query->fetch();
@@ -107,6 +106,29 @@ class Item extends BaseModel{
 		$row = $query->fetch();
 
 		return $row['itemtype_name'];
+	}
+
+	public function getVendorItems() {
+		$query = DB::connection()->prepare('SELECT VendorItem.*
+												FROM VendorItem, ItemToVendorItemMap
+												WHERE ItemToVendorItemMap.item_id = :id
+												AND ItemToVendorItemMap.vendoritem_id = VendorItem.id');
+
+		$query->execute(array('id' => $this->id));
+		$rows = $query->fetchAll();
+
+		$vendoritems = array();
+
+		foreach($rows as $row){
+			$vendoritems[] = new VendorItem(array(
+				'id' => $row['id'],
+				'vendor_id' => $row['vendor_id'],
+				'partnumber' => $row['partnumber'],
+				'datasheeturl' => $row['datasheeturl']
+				));
+		}
+
+		return $vendoritems;
 	}
 
 	public function validate_itemtype_id() {

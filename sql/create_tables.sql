@@ -32,7 +32,6 @@ CREATE TABLE VendorItem(
 );
 
 CREATE TABLE ItemToVendorItemMap(
-	id SERIAL PRIMARY KEY,
 	item_id INTEGER REFERENCES Item(id),
 	vendorItem_id INTEGER REFERENCES VendorItem(id)
 );

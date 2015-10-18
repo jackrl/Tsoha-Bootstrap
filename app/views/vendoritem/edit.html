@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit vendor item</h1>
+
+{% if errors %}
+<div class="alert alert-danger">
+  <ul>
+    {% for error in errors %}
+    <li>{{error}}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<form method="post" action="{{base_path}}/vendoritem/{{vendoritem.id}}/edit">
+  <div class="form-group">
+    <label>Vendor</label>
+    <select name="vendor_id" class="form-control" type="text">
+
+    {% if attributes.vendor_id %}
+      {% for vendor in vendors %}
+        {% if attributes.vendor_id == vendor.id %}
+        <option value="{{vendor.id}}" selected="selected">{{vendor.name}}</option>
+        {% else %}
+        <option value="{{vendor.id}}">{{vendor.name}}</option>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      {% for vendor in vendors %}
+        {% if vendoritem.vendor_id == vendor.id %}
+        <option value="{{vendor.id}}" selected="selected">{{vendor.name}}</option>
+        {% else %}
+        <option value="{{vendor.id}}">{{vendor.name}}</option>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Part Number</label>
+    {% if attributes.partnumber %}
+    <input name="partnumber" class="form-control" type="text" value="{{attributes.partnumber}}">
+    {% else %}
+    <input name="partnumber" class="form-control" type="text" value="{{vendoritem.partnumber}}">
+    {% endif %}
+  </div>
+
+  <div class="form-group">
+    <label>Datasheet URL</label>
+    {% if attributes.datasheeturl %}
+    <input name="datasheeturl" class="form-control" type="text" value="{{attributes.datasheeturl}}">
+    {% else %}
+    <input name="datasheeturl" class="form-control" type="text" value="{{vendoritem.datasheeturl}}">
+    {% endif %}
+  </div>
+
+  <div class="form-group">
+  <button type="submit" class="btn btn-primary">Edit</button>
+  </div>
+</form>
+{% endblock %}

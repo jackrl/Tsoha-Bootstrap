@@ -52,4 +52,58 @@ class User extends BaseModel{
 		
 		return $user;
 	}
+
+	public static function all(){
+		$query = DB::connection()->prepare('SELECT *
+												FROM Users');
+		$query->execute();
+
+		$rows = $query->fetchAll();
+		$users = array();
+
+		foreach($rows as $row){
+			$users[] = new User(array(
+				'id' => $row['id'],
+				'username' => $row['username'],
+				'password' => $row['password'],
+				'admin' => $row['admin']
+				));
+		}
+
+		return $users;
+	}
+
+	public function save(){
+		$query = DB::connection()->prepare('INSERT INTO Users (username, password, admin)
+												VALUES (:username, :password, :admin)
+												RETURNING id');
+		$query->execute(array(
+			'username' => $this->username,
+			'password' => $this->password,
+			'admin' => $this->admin
+			));
+
+		$row = $query->fetch();
+		$this->id = $row['id'];
+	}
+
+	public function update(){
+	    $query = DB::connection()->prepare('UPDATE Users SET (username, password, admin)
+	    										= (:username, :password, :admin)
+	    										WHERE id = :id');
+	    $query->execute(array(
+	    	'id' => $this->id,
+	    	'username' => $this->username,
+			'password' => $this->password,
+			'admin' => $this->admin
+	    ));
+	}
+
+	public function destroy(){
+	    $query = DB::connection()->prepare('DELETE FROM Users
+	    										WHERE id = :id');
+	    $query->execute(array(
+	    	'id' => $this->id
+	    ));
+	}
 }
